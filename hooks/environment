@@ -7,8 +7,9 @@ main() {
   env_list=$(plugin_read_list | evaluate_key_item)
 
   echo "Exporting ${#env_list} bytes of env"
-  printf "$env_list"
-  
+  set -a
+  eval "$env_list"
+  set +a
 }
 
 function plugin_read_list() {
@@ -45,7 +46,7 @@ function read_meta_data() {
   meta_data_key_alias=${key_mapped[1]:-}
   mapped_key=${meta_data_key_alias:-$meta_data_key}
 
-  value=$(buildkite-agent meta-data get "$meta_data_key")
+  value=$($(buildkite-agent meta-data get "$meta_data_key") | tr '\n' ' ')
 
   if [[ -n "$value" ]]; then
     echo "${mapped_key}=(${#value} chars)" >&2;

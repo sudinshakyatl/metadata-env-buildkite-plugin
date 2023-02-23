@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euo pipefail
+set -xeuo pipefail
 
 main() {
   echo "Reading meta-data ..."
@@ -30,6 +30,7 @@ function plugin_read_list() {
 function evaluate_key_item() {
   while IFS=$'\n' read -r key_item ; do
     read_meta_data "$key_item"
+    echo $key_item
   done
 }
 
@@ -46,11 +47,11 @@ function read_meta_data() {
   meta_data_key_alias=${key_mapped[1]:-}
   mapped_key=${meta_data_key_alias:-$meta_data_key}
 
-  value=$($(buildkite-agent meta-data get "$meta_data_key") | tr '\n' ' ')
+  value=$(buildkite-agent meta-data get "$meta_data_key")
 
   if [[ -n "$value" ]]; then
     echo "${mapped_key}=(${#value} chars)" >&2;
-    echo "${mapped_key}=${value}"
+    echo "${mapped_key}=${value }"
   else
     echo "Could not read meta-data: ${meta_data_key}" >&2;
     exit 1

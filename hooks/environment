@@ -53,7 +53,7 @@ function read_meta_data() {
   
   if [[ -n "$value" ]]; then
     echo "${mapped_key}=(${#value} chars)" >&2;
-    echo "${mapped_key}=${value }"
+    echo "${mapped_key}=${value}"
   else
     echo "Could not read meta-data: ${meta_data_key}" >&2;
     exit 1
